@@ -1,5 +1,3 @@
-
-
 import * as express from 'express';
 import {Application} from "express";
 import {getAllCourses, getCourseByUrl} from "./get-courses.route";
@@ -11,8 +9,6 @@ import {deleteCourse} from './delete-course.route';
 
 const bodyParser = require('body-parser');
 
-
-
 const app: Application = express();
 
 const cors = require('cors');
@@ -20,7 +16,6 @@ const cors = require('cors');
 app.use(cors({origin: true}));
 
 app.use(bodyParser.json());
-
 
 app.route('/api/login').post(loginUser);
 
@@ -37,12 +32,6 @@ app.route('/api/courses/:courseUrl').get(getCourseByUrl);
 app.route('/api/lessons').get(searchLessons);
 
 
-
-
-const httpServer:any = app.listen(9000, () => {
+const httpServer:any = app.listen(3000, () => {
     console.log("HTTP REST API Server running at http://localhost:" + httpServer.address().port);
 });
-
-
-
-
