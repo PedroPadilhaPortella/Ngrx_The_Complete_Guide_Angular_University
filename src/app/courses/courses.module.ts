@@ -78,10 +78,5 @@ export const coursesRoutes: Routes = [
   ]
 })
 export class CoursesModule {
-
-  constructor() {
-
-  }
-
-
+  constructor() { }
 }
