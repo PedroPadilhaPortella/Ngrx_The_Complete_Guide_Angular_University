@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { map } from 'rxjs/operators';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { logout, login } from './auth/auth.action';
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
+import { User } from './auth/model/user.model';
+import { AuthState } from './auth/reducers';
 
 @Component({
     selector: 'app-root',
@@ -12,10 +15,20 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 export class AppComponent implements OnInit {
 
     loading = true;
+    userProfile: any;
 
-    constructor(private router: Router) { }
+    isLoggedIn$: Observable<boolean>;
+    isLoggedOut$: Observable<boolean>;
+
+    constructor(private router: Router, private store: Store<AuthState>,) { }
 
     ngOnInit() {
+        this.userProfile = localStorage.getItem('user');
+        
+        if (this.userProfile) {
+            this.store.dispatch(login({ user: JSON.parse(this.userProfile) }))
+        }
+
         this.router.events.subscribe(event => {
             switch (true) {
                 case event instanceof NavigationStart: {
@@ -34,7 +47,17 @@ export class AppComponent implements OnInit {
                 }
             }
         });
+
+        this.isLoggedIn$ = this.store.pipe(
+            select(isLoggedIn),
+        );
+
+        this.isLoggedOut$ = this.store.pipe(
+            select(isLoggedOut)
+        );
     }
 
-    logout() { }
+    logout() {
+        this.store.dispatch(logout());
+    }
 }
