@@ -1,7 +1,7 @@
-import {compareCourses, Course} from '../model/course';
-import {createEntityAdapter, EntityState} from '@ngrx/entity';
-import {createReducer, on} from '@ngrx/store';
-import {CourseActions} from '../action-types';
+import { compareCourses, Course } from '../model/course';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { createReducer, on } from '@ngrx/store';
+import { CourseActions } from '../action-types';
 
 export interface CoursesState extends EntityState<Course> {
     allCoursesLoaded: boolean
@@ -12,7 +12,7 @@ export const adapter = createEntityAdapter<Course>({
 });
 
 export const initialCoursesState = adapter.getInitialState({
-    allCoursesLoaded:false
+    allCoursesLoaded: false
 });
 
 export const coursesReducer = createReducer(
@@ -21,12 +21,13 @@ export const coursesReducer = createReducer(
     on(CourseActions.allCoursesLoaded,
         (state, action) => adapter.addAll(
             action.courses,
-            {...state,
-                allCoursesLoaded:true
+            {
+                ...state,
+                allCoursesLoaded: true
             })),
 
     on(CourseActions.courseUpdated, (state, action) =>
-        adapter.updateOne(action.update, state) )
+        adapter.updateOne(action.update, state))
 );
 
 
